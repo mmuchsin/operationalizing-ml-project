@@ -13,4 +13,6 @@ ml.t3.medium as the cheapest just for running the jupyter notebook
 ## Download and Upload Data to an S3 Bucket
 take a screenshot showing that you've set up an S3 bucket. Include this screenshot in your final submission.
 
-##
+## Training and Deployment
+because ml.g4dn.xlarge spot instance is not available in the provided account.
+cpu optimized instance ml.c5.xlarge spot instance $0.0751/h normal price $0.204/h
