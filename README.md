@@ -4,20 +4,28 @@ The goal of this project will be to use several important tools and features of 
 
 ## Training and Deployment on Sagemaker
 ### Initial Setup
-1. Install unzip command with sudo yum install unzip -y
--create and open sagemaker instance
+1. Create and open a sagemaker notebook instance
+2. Install unzip command
+   ```
+   sudo yum install unzip -y
+   ```
 -take a scheenshot of your sagemaker instance setup
 -write about sagemaker instance you created, including a justification of why you choose th instance type you did
 
 ml.t3.medium as the cheapest just for running the jupyter notebook
 
 ### Download and Upload Data to an S3 Bucket
+```
+wget -nc https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/dogImages.zip
+unzip -q dogImages.zip
+aws s2 cp ./dogImages s3://
+```
 take a screenshot showing that you've set up an S3 bucket. Include this screenshot in your final submission.
 
 #### Training and Deployment
 #### Single Instance
 because ml.g4dn.xlarge spot instance is not available in the provided account.
-cpu optimized instance ml.c5.xlarge spot instance $0.0751/h normal price $0.204/h
+cpu optimized instance ml.c5.2xlarge spot instance $0.0751/h normal price $0.204/h
 
 #### Multi Instance
 #### Endpoint
