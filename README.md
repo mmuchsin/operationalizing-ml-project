@@ -18,7 +18,7 @@ ml.t3.medium as the cheapest just for running the jupyter notebook
 ```
 wget -nc https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/dogImages.zip
 unzip -q dogImages.zip
-aws s2 cp ./dogImages s3://
+aws s2 cp ./dogImages s3://operationalizing-ml/dataset
 ```
 take a screenshot showing that you've set up an S3 bucket. Include this screenshot in your final submission.
 
