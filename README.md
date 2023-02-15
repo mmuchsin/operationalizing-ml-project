@@ -18,7 +18,7 @@ ml.t3.medium as the cheapest just for running the jupyter notebook
 ```
 wget -nc https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/dogImages.zip
 unzip -q dogImages.zip
-aws s2 cp ./dogImages s3://operationalizing-ml/dataset
+aws s3 cp ./dogImages s3://operationalizing-ml/dataset
 ```
 take a screenshot showing that you've set up an S3 bucket. Include this screenshot in your final submission.
 
@@ -40,7 +40,6 @@ Note: when you select an AMI for your EC2 instance, you should select the "Amazo
 After your code is finished running, you can open the TrainedModels directory on your EC2 instance and take a screenshot of the model that has been saved in it, to provide evidence that you completed this step.
 
 ### Training and saving on EC2
-
 ## Sagemaker Training vs EC2 Training
 sagemaker:
 - invoke training job
@@ -55,3 +54,12 @@ ec2:
 - load data from local instance directory
 - save model data to local directory
 - 
+
+### Lambda Function Setup
+You should also notice the content of this Lambda function. You may have to set up many Lambda functions in your career, so do your best to understand how this one is set up so you can follow its example. In particular, you should notice how it invokes the endpoint (with the invoke_endpoint() method) and how it sets up the return statement. Write at least 1 paragraph describing how this function is written and how it works.
+
+### Security and Testing
+Write about the security of your AWS workspace in your writeup. Are there any security vulnerabilities that need to be addressed? Think about some common security vulnerabilities. For example, roles that have "FullAccess" policies attached may be too permissive and may lead to problems. Roles that are old or inactive may lead to vulnerabilities because they may belong to people who are no longer working on the project and who may not be careful about ensuring the project's success. You might also find roles for functions that the project is no longer using, which should probably be deleted.
+
+### Concurrency and Auto-scaling
+When you set up concurrency and auto-scaling, you will make several choices about configuration. Write about the choices you made in the setup of concurrency and auto-scaling, and why you made each of those choices.
