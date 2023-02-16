@@ -9,10 +9,9 @@ The goal of this project will be to use several important tools and features of 
    ```
    sudo yum install unzip -y
    ```
--take a scheenshot of your sagemaker instance setup
--write about sagemaker instance you created, including a justification of why you choose th instance type you did
 
-ml.t3.medium as the cheapest just for running the jupyter notebook
+![notebook](src/img/1-notebook-instance-crop.png)
+I choose `ml.t3.medium` as the cheapest compute instance just for running the jupyter notebook
 
 ### Download and Upload Data to an S3 Bucket
 ```
@@ -21,11 +20,13 @@ unzip -q dogImages.zip
 aws s3 cp ./dogImages s3://operationalizing-ml/dataset
 ```
 take a screenshot showing that you've set up an S3 bucket. Include this screenshot in your final submission.
+![s3_bucket](src/img/2-s3-setup-crop.png)
 
 #### Training and Deployment
 #### Single Instance
 because ml.g4dn.xlarge spot instance is not available in the provided account.
 cpu optimized instance ml.c5.2xlarge spot instance $0.0751/h normal price $0.204/h
+
 
 #### Multi Instance
 #### Endpoint
@@ -35,11 +36,13 @@ cpu optimized instance ml.c5.2xlarge spot instance $0.0751/h normal price $0.204
 Think about what type of instance you want to create, based on cost, computing power, and launch speed. Decide the type of instance you want, create it in your workspace, and write a justification of why you chose the instance type you did.
 
 Note: when you select an AMI for your EC2 instance, you should select the "Amazon Deep Learning AMI" so that you can use its libraries.
+![ec2_setup](src/img/4.1-ec2-c5l-instance-setup-crop.png)
 
 ### Preparing for EC2 model training
 After your code is finished running, you can open the TrainedModels directory on your EC2 instance and take a screenshot of the model that has been saved in it, to provide evidence that you completed this step.
 
 ### Training and saving on EC2
+![ec2_training](src/img/4.2-ec2-c5l-instance-train-crop.png)
 ## Sagemaker Training vs EC2 Training
 sagemaker:
 - invoke training job
