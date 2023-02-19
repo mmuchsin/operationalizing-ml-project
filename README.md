@@ -24,6 +24,8 @@ take a screenshot showing that you've set up an S3 bucket. Include this screensh
 
 #### Training and Deployment
 #### Single Instance
+I tried to use a spot instance for this single instance training. And the cheapest
+spot instance available in this account is `ml.c5.2xlarge` 
 because ml.g4dn.xlarge spot instance is not available in the provided account.
 cpu optimized instance ml.c5.2xlarge spot instance $0.0751/h normal price $0.204/h
 
@@ -66,3 +68,5 @@ Write about the security of your AWS workspace in your writeup. Are there any se
 
 ### Concurrency and Auto-scaling
 When you set up concurrency and auto-scaling, you will make several choices about configuration. Write about the choices you made in the setup of concurrency and auto-scaling, and why you made each of those choices.
+
+>You will submit screenshots for Sagemaker instance setup, EC2 setup, Lambda function setup, and IAM security.You will submit screenshots for Sagemaker instance setup, EC2 setup, Lambda function setup, and IAM security.You will submit screenshots for Sagemaker instance setup, EC2 setup, Lambda function setup, and IAM security.
