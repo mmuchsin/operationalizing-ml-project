@@ -9,9 +9,9 @@ The goal of this project will be to use several important tools and features of 
    ```
    sudo yum install unzip -y
    ```
-
-![notebook](src/img/1-notebook-instance-crop.png)
 I choose `ml.t3.medium` as the cheapest compute instance just for running the jupyter notebook
+![notebook](src/img/1-notebook-instance-crop.png)
+
 
 ### Download and Upload Data to an S3 Bucket
 ```
@@ -19,56 +19,75 @@ wget -nc https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/dogImages.z
 unzip -q dogImages.zip
 aws s3 cp ./dogImages s3://operationalizing-ml/dataset
 ```
-take a screenshot showing that you've set up an S3 bucket. Include this screenshot in your final submission.
+I create a s3 bucket `operationalizing-ml`
 ![s3_bucket](src/img/2-s3-setup-crop.png)
 
 #### Training and Deployment
-#### Single Instance
-I tried to use a spot instance for this single instance training. And the cheapest
-spot instance available in this account is `ml.c5.2xlarge` 
-because ml.g4dn.xlarge spot instance is not available in the provided account.
-cpu optimized instance ml.c5.2xlarge spot instance $0.0751/h normal price $0.204/h
 
+#### Single Instance
+In my opinion because this training use small epoch, i don't need to spend more for a GPU
+instances and a CPU optimised instance like `ml.c5.2xlarge` is enough . It charges
+ **$0.408 per Hour** and took **11 Minutes and 3 Seconds** to finish training.
 
 #### Multi Instance
+For the multi instance training I used spot instances. And the cheapest
+spot instance available in this account is `ml.c5.2xlarge`. It provides a vordable
+price for **$0.174 per Hour**. I used 2 instances and took **22 Minutes and 33 Seconds**
+to finish training in total. 
 #### Endpoint
-
+I created an endpoint from muli-instances estimator
+![endpoint](src/img/3.1-endpoint-multi-crop.png)
 ## EC2 Training
 ### EC2 Setup
-Think about what type of instance you want to create, based on cost, computing power, and launch speed. Decide the type of instance you want, create it in your workspace, and write a justification of why you chose the instance type you did.
-
-Note: when you select an AMI for your EC2 instance, you should select the "Amazon Deep Learning AMI" so that you can use its libraries.
+From previous training on Sagemaker, i used `ml.c5.2xlarge`. When i take a look
+at CloueWatch data. It shows me that the training don't use that much storage.
+So I choose `ml.c5.large` with **Amazon Deep Learning AMI PyTorch 1.13.1 (Amazon Linux 2)**.
 ![ec2_setup](src/img/4.1-ec2-c5l-instance-setup-crop.png)
 
-### Preparing for EC2 model training
-After your code is finished running, you can open the TrainedModels directory on your EC2 instance and take a screenshot of the model that has been saved in it, to provide evidence that you completed this step.
-
-### Training and saving on EC2
+### EC2 Model training
+Unlike training on sagemaker, the data preparation have to setup manually.
 ![ec2_training](src/img/4.2-ec2-c5l-instance-train-crop.png)
 ## Sagemaker Training vs EC2 Training
 sagemaker:
-- invoke training job
+- invoke a training job
 - input data from s3
-- model data to s3
-- price?
-- scalability?
-- easy setup
+- save model data to s3
 
 ec2:
 - training on local instance
 - load data from local instance directory
 - save model data to local directory
-- 
 
 ### Lambda Function Setup
-You should also notice the content of this Lambda function. You may have to set up many Lambda functions in your career, so do your best to understand how this one is set up so you can follow its example. In particular, you should notice how it invokes the endpoint (with the invoke_endpoint() method) and how it sets up the return statement. Write at least 1 paragraph describing how this function is written and how it works.
+This lambsa fucntion will invokes an endpoint `pytorch-inference-2023-01-24-07-44-31-770`.
+It only accepts a request with content type `application/json` and return a data with 
+the following format:
+```json
+{
+   'statusCode': 200,
+   'headers' : { 'Content-Type' : 'text/plain', 'Access-Control-Allow-Origin' : '*' },
+   'type-result':str(type(result)),
+   'COntent-Type-In':str(context),
+   'body' : json.dumps(sss)
+}
+```
+The detail about this lambda function can be found at `src/code/lamdafunction.py`.
 ![lambda_ok](src/img/5-lambda-crop.png)
 
 ### Security and Testing
-Write about the security of your AWS workspace in your writeup. Are there any security vulnerabilities that need to be addressed? Think about some common security vulnerabilities. For example, roles that have "FullAccess" policies attached may be too permissive and may lead to problems. Roles that are old or inactive may lead to vulnerabilities because they may belong to people who are no longer working on the project and who may not be careful about ensuring the project's success. You might also find roles for functions that the project is no longer using, which should probably be deleted.
+By default for the security purpose, AWS Lambda does not have acces to AWS Sagemaker.
+Certain authentication methods is required. One of the method is by using `IAM role`
+with corresponding policy. In this case `AmazonSageMakerFullAccess` policy.
 ![iam_role](src/img/6-lambda-role-crop.png)
+![lambda_testing](src/img/7-lambda-ok-crop.png)
 
 ### Concurrency and Auto-scaling
-When you set up concurrency and auto-scaling, you will make several choices about configuration. Write about the choices you made in the setup of concurrency and auto-scaling, and why you made each of those choices.
-
->You will submit screenshots for Sagemaker instance setup, EC2 setup, Lambda function setup, and IAM security.You will submit screenshots for Sagemaker instance setup, EC2 setup, Lambda function setup, and IAM security.You will submit screenshots for Sagemaker instance setup, EC2 setup, Lambda function setup, and IAM security.
+The main purpose of concurrency and auto scaling is to reduce latency during
+high traffic scenario. In this project i just deal with low traffic situations.
+So small amount of conccurrency is acceptable. I configured concurrency after create
+a version of lambda function. The only concurency setting available is provisioned
+concurrency.
+![concurrency](src/img/8.1-concurrency_done-crop.png)
+The same reason as concurrency, small amount of instances is acceptable for auto-scaling.
+I choose **3** for the maximun instances. It will be triggered if **10** requests come
+simultaneously.
