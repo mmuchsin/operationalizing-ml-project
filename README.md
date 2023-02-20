@@ -59,7 +59,7 @@ ec2:
 - load data from local instance directory
 - save model data to local directory
 
-### Lambda Function Setup
+### Lambda Function
 This lambda function will invoke an endpoint `pytorch-inference-2023-01-24-07-44-31-770`.
 It only accepts a request with content type `application/json` and returns a data with the
 following format:
