@@ -79,6 +79,13 @@ The detail about this lambda function can be found at `src/code/lamdafunction.py
 By default for security purposes, AWS Lambda does not have access to AWS Sagemaker.
 Certain authentication methods are required. One of the method is by using `IAM role`
 with the corresponding policies. In this case `AmazonSageMakerFullAccess` policy.
+It grants the lambda function broader permissions to access SageMaker services.
+This scenario will produce vulnerability because the lambda function only needs
+permissions to invoke an endpoint from Sagemaker. So using the principle of least
+privilege is recommended. The corresponding policy needs to be adjusted to limit
+the lambda function to invoke an endpoint only. Also, the old or unused roles
+need to be deleted to grant more security.
+
 ![iam_role](src/img/6-lambda-role-crop.png)
 ![lambda_testing](src/img/7-lambda-ok-crop.png)
 
@@ -92,3 +99,5 @@ concurrency.
 For the same reason as concurrency, a small amount of instances is acceptable for auto-scaling.
 I choose **3** for the maximum instances. It will be triggered if **10** requests come
 simultaneously.
+
+![auto_scaling](src/img/8.2-autoscale_done-crop.png)
